@@ -1,0 +1,71 @@
+<%
+  puts "------ Index JSP ------------"
+
+  if not @message.nil?
+%>
+    <span style="color: magenta"><%= @message %></span><br/><br/>
+<%
+  end
+  puts "The phase is #{@attempt.phase}"
+  if @attempt.phase == "begin"
+    @attempt = Attempt.new
+    @attempt.phase == "begin"
+    @attempt.current_question_number == 9
+%>
+<%= form_for @attempt, url: '/quiz/start' do |f| %>
+Please enter your name to start the quiz.<br/>
+Make sure it is unique, as this app doesn't coordinate across hosts. It's up to you.
+  <%= f.text_field :taker %>
+  <%= f.hidden_field :quiz_id %>
+  <%= f.hidden_field :current_question_number %>
+  <%= f.hidden_field :phase %>
+  <%= f.submit "Start the Quiz" %>
+<% end %>
+<%
+  else
+    puts "The current question is #{@attempt.current_question_number}"
+    current_question = @questions[@attempt.current_question_number - 1]
+
+    # Determine if that was the last question
+    if @attempt.current_question_number > @questions.size
+        puts "No more questions! We are done."
+        @attempt.phase = "quiz"
+%>
+        <b>You have completed the quiz!</b><br/><br/>
+        Your quiz host will inform you of the winners shortly.<br/><br/>
+            <%= form_for @attempt, url: '/quiz/menu' do |f| %>
+            <%= f.hidden_field :quiz_id %>
+            <%= f.hidden_field :taker %>
+            <%= f.hidden_field :current_question_number %>
+            <%= f.hidden_field :phase %>
+            <%= f.submit "Go back to the main menu" %>
+            <% end %>
+<%  else  %>
+        <b>Quiz:</b> <%= @quiz.name %>&nbsp;&nbsp;&nbsp;
+        <b>Question</b> #<%= @attempt.current_question_number %> of <%= @questions.size %>&nbsp;&nbsp;&nbsp;
+        <b>Name:</b> <%= @attempt.taker %><br/><br/>
+        <b><%= current_question.question %></b><br/>
+        <table>
+          <tr><td>A.</td><td><%= current_question.option_a %></td></tr>
+          <tr><td>B.</td><td><%= current_question.option_b %></td></tr>
+          <tr><td>C.</td><td><%= current_question.option_c %></td></tr>
+          <tr><td>D.</td><td><%= current_question.option_d %></td></tr>
+        </table>
+        <br/>
+        <%= form_for @attempt, url: '/quiz/answer' do |f| %>
+          <%= f.select :answer, [["A", "A"], ["B", "B"], ["C", "C"], ["D", "D"]],
+                                   { include_blank: false } %>
+          <%= f.hidden_field :quiz_id %>
+          <%= f.hidden_field :taker %>
+          <%= f.hidden_field :current_question_number %>
+          <%= f.hidden_field :phase %>
+          <%= f.submit "Submit your Answer" %>
+        <% end %>
+
+<%  end
+  end
+%>
+<br/><br/>
+<% if not @number_of_players.nil? %>
+Current Number of Players: <%= @number_of_players %>
+<% end %>

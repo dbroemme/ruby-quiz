@@ -1,0 +1,27 @@
+         
+          <%
+          if @attempt.phase == "begin"
+          %>
+          Wait until the event host directs you to start.<br/><br/>
+          <a href="/quiz/index">Take the DevSpaces Quiz</a>
+          <%
+          elsif @attempt.phase == "quiz"
+          %>
+          Wait until the event host directs you to start.<br/><br/>
+            <%= form_for @attempt, url: '/quiz/games' do |f| %>
+            <%= f.hidden_field :quiz_id %>
+            <%= f.hidden_field :taker %>
+            <%= f.hidden_field :current_question_number %>
+            <%= f.hidden_field :phase %>
+            <%= f.submit "Play the reaction time game" %>
+            <% end %>
+          </a>
+          <%
+          else
+          %>
+          Thanks for playing!
+          <%
+          end
+          %>
+        <br/><br/><br/>
+
