@@ -16,4 +16,4 @@ RUN bundle exec rake db:seed
 
 EXPOSE 5000
 
-CMD bundle exec puma -C config/puma.rb
+CMD ls
