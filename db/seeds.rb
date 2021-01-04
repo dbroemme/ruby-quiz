@@ -7,77 +7,44 @@ require 'question'
 #
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
-Quiz.create(id: 1, name: 'DevSpaces Live Event')
+Quiz.create(id: 1, name: 'The New Years Trivia Challenge')
 Question.create(quiz_id: 1, order: 1,
-      question: 'DevSpaces Filesystem Persistence',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
+      question: 'Which investment is shown in the graph?',
+      option_a: 'Amazon',
+      option_b: 'Bitcoin',
+      option_c: 'Ethereum',
+      option_d: 'Tesla',
       correct_answer: 'B'
 )
 Question.create(quiz_id: 1, order: 2,
-      question: 'DevSpaces Capabilities',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
-      correct_answer: 'D'
+      question: 'In the graph, how many paths connect node A to node B that never go up?',
+      option_a: '24',
+      option_b: '27',
+      option_c: '35',
+      option_d: '37',
+      correct_answer: 'C'
 )
 Question.create(quiz_id: 1, order: 3,
-      question: 'Investment graph',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
-      correct_answer: 'B'
+      question: 'On average, humans blink 20 times per minute. How many times do they blink when looking at a computer?',
+      option_a: '7',
+      option_b: '12',
+      option_c: '20',
+      option_d: '23',
+      correct_answer: 'A'
 )
 Question.create(quiz_id: 1, order: 4,
-      question: 'Number of paths',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
-      correct_answer: 'C'
+      question: 'Which planet in our solar system is shown here?',
+      option_a: 'Jupiter',
+      option_b: 'Mars',
+      option_c: 'Mercury',
+      option_d: 'Venus',
+      correct_answer: 'A'
 )
 Question.create(quiz_id: 1, order: 5,
-      question: 'Find the mistake',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
-      correct_answer: 'D'
-)
-Question.create(quiz_id: 1, order: 6,
-      question: 'How many Jewels will the observer see?',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
-      correct_answer: 'B'
-)
-Question.create(quiz_id: 1, order: 7,
-      question: 'Blinks per minute',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
-      correct_answer: 'A'
-)
-Question.create(quiz_id: 1, order: 8,
-      question: 'Planet in our solar system',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
-      correct_answer: 'A'
-)
-Question.create(quiz_id: 1, order: 9,
-      question: 'City satellite view',
-      option_a: 'Option A shown on screen',
-      option_b: 'Option B shown on screen',
-      option_c: 'Option C shown on screen',
-      option_d: 'Option D shown on screen',
+      question: 'Which city is shown here?',
+      option_a: 'Boston, MA USA',
+      option_b: 'Shenzen, China',
+      option_c: 'Tokyo, Japan',
+      option_d: 'Toronto, Canada',
       correct_answer: 'C'
 )
-

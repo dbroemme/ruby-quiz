@@ -28,7 +28,6 @@ ActiveRecord::Schema.define(version: 20201028195546) do
     t.string "option_c"
     t.string "option_d"
     t.string "correct_answer"
-    t.string "choice"
   end
 
   create_table "quizzes", force: :cascade do |t|

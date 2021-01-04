@@ -12,7 +12,6 @@ class CreateQuiz < ActiveRecord::Migration[5.1]
       t.string :option_c
       t.string :option_d
       t.string :correct_answer
-      t.string :choice
     end
     create_table :attempts do |t|
       t.string :quiz_id

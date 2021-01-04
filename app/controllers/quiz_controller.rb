@@ -5,8 +5,6 @@ class QuizController < ApplicationController
 
   include ApplicationHelper
 
-  @@taker_set = Set.new
-
   def load_data
     @quiz = Quiz.find(1)
     @questions = Question.where(quiz_id: @quiz.id).to_a
@@ -16,33 +14,14 @@ class QuizController < ApplicationController
         @attempt = Attempt.new
         @attempt.phase = "begin"
     end
-    @number_of_players = @@taker_set.size
   end
 
   def index
     load_data
   end
 
-  def games
-    load_data
-  end
-
-  def playgame
-    t = Time.now.utc
-    load_data
-    str_time = t.strftime("%Y-%m-%dT%H:%M:%S.%N")
-    message_text = "{\"quiz_id\"=>\"0\", \"question\"=>-1, \"taker\"=>\"#{@attempt.taker}\", \"submittedat\"=>\"#{str_time}\"}"
-    publish_message(message_text)
-    @attempt.phase = "done"
-    render :template => "quiz/menu"
-  end
-
   def menu
     load_data
-  end
-
-  def clear
-    @@taker_set = Set.new
   end
 
   def start
@@ -59,22 +38,14 @@ class QuizController < ApplicationController
     elsif @attempt.taker.length == 0
         @message = "You must provide a name."
         @attempt.phase = "begin"
-    elsif @@taker_set.include? @attempt.taker
-        @message = "Unforunately, the name #{@attempt.taker} is already taken. Please choose a different name."
-        @attempt.phase = "begin"
     else
-        @@taker_set.add @attempt.taker
-        t = Time.now.utc
-        str_time = t.strftime("%Y%m%d%H%M%S.%N")
-        message_text = "{\"quiz_id\"=>\"#{@quiz.id}\", \"question\"=>0, \"taker\"=>\"#{@attempt.taker}\", \"answer\"=>\"none\", \"submittedat\"=>\"#{str_time}\", \"history\"=>\"\"}"
-        publish_message(message_text)
         @attempt.phase = "name"
     end
     render :template => "quiz/index"
   end
 
   def attempt_params
-    params.require(:attempt).permit(:taker, :quiz_id, :answer, :phase, :current_question_number)
+    params.require(:attempt).permit(:taker, :quiz_id, :number_correct, :answer, :phase, :current_question_number)
   end
 
   def restart
@@ -87,11 +58,32 @@ class QuizController < ApplicationController
     puts "In controller answer"
     load_data
 
-    t = Time.now.utc
-    str_time = t.strftime("%Y%m%d%H%M%S.%N")
-    message_text = "{\"quiz_id\"=>\"#{@quiz.id}\", \"question\"=>#{@attempt.current_question_number.to_i}, \"taker\"=>\"#{@attempt.taker}\", \"answer\"=>\"#{@attempt.answer}\", \"submittedat\"=>\"#{str_time}\"}"
-    publish_message(message_text)
-    @message = "On question #{@attempt.current_question_number.to_i}, you answerered #{@attempt.answer}."
+    current_question = @questions[@attempt.current_question_number.to_i - 1]
+    correct_answer_text = "" 
+    if current_question.correct_answer == "A"
+        correct_answer_text = current_question.option_a
+    elsif current_question.correct_answer == "B"
+        correct_answer_text = current_question.option_b
+    elsif current_question.correct_answer == "C"
+        correct_answer_text = current_question.option_c
+    elsif current_question.correct_answer == "D"
+        correct_answer_text = current_question.option_d
+    end
+
+    # Check if the answer was correct
+    if @attempt.answer == current_question.correct_answer
+        @message = "Correct! The answer was #{@attempt.answer}: #{correct_answer_text}"
+        if @attempt.number_correct.nil?
+            @attempt.number_correct = 1
+        else
+            @attempt.number_correct = @attempt.number_correct + 1
+        end
+    else 
+        @message = "Sorry, the correct answer was #{current_question.correct_answer}: #{correct_answer_text}"
+    end
+    puts "Total questions: #{@questions.size}. We are on question #{@attempt.current_question_number.to_i}"
+    puts "The correct answer was #{current_question.correct_answer}. User chose #{@attempt.answer}."
+    puts "Current number correct: #{@attempt.number_correct}"
 
     @attempt.current_question_number = @attempt.current_question_number.to_i + 1
     render :template => "quiz/index"
