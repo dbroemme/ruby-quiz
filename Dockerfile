@@ -1,22 +1,15 @@
-FROM engineyard/kontainers:2.5-v1.0.0
+FROM ruby:2.6.6
+RUN apt-get update -qq && apt-get install -y nodejs
 
-# This will be needed by spree
-RUN apt-get install -y imagemagick
-
-# Configure the main working directory. This is the base
-# directory used in any further RUN, COPY, and ENTRYPOINT
-# commands.
 RUN mkdir -p /app
 WORKDIR /app
 
-ARG RAILS_ENV
-# Copy the Gemfile and Gemfile.lock and bundle
-COPY Gemfile ./
-COPY Gemfile.lock ./
-RUN bundle install --jobs 20 --retry 5
+COPY Gemfile /app/Gemfile
+COPY Gemfile.lock /app/Gemfile.lock
 
-# Copy the main application.
-COPY . ./
+RUN gem install bundler && bundle install --jobs 20 --retry 5
+
+COPY . /app
 
 RUN bundle exec rake db:migrate RAILS_ENV=development
 RUN bundle exec rake db:seed
