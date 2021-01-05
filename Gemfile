@@ -1,5 +1,7 @@
 source 'https://rubygems.org'
 
+ruby '2.6.3'
+
 gem 'aws-sdk', '~> 3.0', '>= 3.0.1'
 gem 'rails',                   '5.1.6'
 gem 'bcrypt',                  '3.1.12'
